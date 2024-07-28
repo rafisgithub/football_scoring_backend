@@ -15,6 +15,8 @@
                                 <li><a href="{{ route('players') }}" class="nav-link">Players</a></li>
                                 <li><a href="{{ route("blog") }}" class="nav-link">Blog</a></li>
                                 <li><a href="{{ route('contact') }}" class="nav-link">Contact</a></li>
+                                <li><a href="{{ route('admin.register.form') }}" class="nav-link">Registration</a></li>
+                                <li><a href="{{ route('admin.login.form') }}" class="nav-link">Login</a></li>
                             </ul>
                         </nav>
 

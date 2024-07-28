@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Mail;
 class AuthController extends Controller
 {
     public function register(Request $request){
+
      $validatedData = $request->validate([
         'first_name' => 'required|max:55',
         'last_name' => 'required|max:55',
         'email' => 'required|email|max:255|unique:users',
+        'role' => 'required',
         'phone' => 'required|max:255',
         'city' => 'required|max:255',
         'password' => 'required|min:5|confirmed',
@@ -24,6 +26,7 @@ class AuthController extends Controller
         'first_name' => $validatedData['first_name'],
         'last_name' => $validatedData['last_name'],
         'email' => $validatedData['email'],
+        'role' => $validatedData['role'],
         'phone' => $validatedData['phone'],
         'city' => $validatedData['city'],
         'password' => Hash::make($validatedData['password']),
