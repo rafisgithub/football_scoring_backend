@@ -75,24 +75,19 @@ class AdminAuthController extends Controller
         return view('admin.moderators.index',compact('moderators'));
     }
 
+    public function addModerator(){
+        // return "HI";
+        return view('admin.moderators.add-moderator');
+    }
 
-    public function addModerator(Request $request){
-
-        $validatedData = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'role' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'file' => 'nullable|file|mimes:jpg,png,jpeg|max:2048',
-        ]);
+    public function storeModerator(Request $request){
 
             $user = new User();
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
             $user->role = $request->role;
             $user->email = $request->email;
-            $user->password = decrypt($request->password);
+            $user->password = Hash::make($request->password);
 
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
@@ -104,21 +99,45 @@ class AdminAuthController extends Controller
         $user->save();
 
         if ($user) {
-            return redirect()->back()->with('success', 'Moderator added successfully');
+            return redirect()->route('moderators')->with('success', 'Moderator added successfully');
         } else {
             return redirect()->back()->with('error', 'Moderator not added');
         }
     }
 
+    public function editModerator($id){
+        $moderator = User::find($id);
+        return view('admin.moderators.edit-moderator',compact('moderator'));
+    }
 
+   public function updateModerator(Request $request,$id){
+        $user = User::find($id);
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->role = $request->role;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
 
-    public function updateModerator(){
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('admin-assets/moderator', $filename, 'public');
+            $user->image = $path;
+        }
 
-        $moderator = User::find($request->id);
+        $user->save();
 
-    
-        return redirect()->back()->with('success', 'Moderator updated successfully.');
-    
+        if ($user) {
+            return redirect()->route('moderators')->with('success', 'Moderator updated successfully');
+        } else {
+            return redirect()->back()->with('error', 'Moderator not updated');
+        }
+    }
+
+    public function deleteModerator($id){
+        $moderator = User::find($id);
+        $moderator->delete();
+        return redirect()->route('moderators')->with('success', 'Moderator deleted successfully');
     }
 
 }

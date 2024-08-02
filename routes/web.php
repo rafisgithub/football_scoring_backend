@@ -26,8 +26,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
         Route::get('/moderator',[AdminAuthController::class,'moderator'])->name('moderators');
-        Route::post('/add-moderator',[AdminAuthController::class,'addModerator'])->name('add-moderator');
-        Route::post('/update-moderator', [ModeratorController::class, 'updateModerator'])->name('update-moderator');
-
+        Route::get('/add-moderator',[AdminAuthController::class,'addModerator'])->name('add-moderator');
+        Route::post('/store-moderator',[AdminAuthController::class,'storeModerator'])->name('store-moderator');
+        Route::get('/edit-moderator/{id}',[AdminAuthController::class,'editModerator'])->name('edit-moderator');
+        Route::post('/update-moderator/{id}',[AdminAuthController::class,'updateModerator'])->name('update-moderator');
+        Route::get('/delete-moderator/{id}',[AdminAuthController::class,'deleteModerator'])->name('delete-moderator');
     });
 });
